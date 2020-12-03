@@ -28,16 +28,16 @@ func TestNewClient(t *testing.T) {
 	for i, e := range expected {
 		client := amqp.New(e.topicPrefix, e.address, e.exchange)
 
-		if client.TopicPrefix() != e.topicPrefix {
-			t.Errorf("Test case %v failed, it should be topic prefix equals to [%s] but got [%s]", i, e.topicPrefix, client.TopicPrefix())
+		if client.TopicPrefix != e.topicPrefix {
+			t.Errorf("Test case %v failed, it should be topic prefix equals to [%s] but got [%s]", i, e.topicPrefix, client.TopicPrefix)
 		}
 
-		if client.Address() != e.address {
-			t.Errorf("Test case %v failed, it should be address equals to [%s] but got [%s]", i, e.exchange, client.Address())
+		if client.Address != e.address {
+			t.Errorf("Test case %v failed, it should be address equals to [%s] but got [%s]", i, e.exchange, client.Address)
 		}
 
-		if client.Exchange() != e.exchange {
-			t.Errorf("Test case %v failed, it should be exchange [%s] but got [%s]", i, e.exchange, client.Exchange())
+		if client.Exchange != e.exchange {
+			t.Errorf("Test case %v failed, it should be exchange [%s] but got [%s]", i, e.exchange, client.Exchange)
 		}
 	}
 }

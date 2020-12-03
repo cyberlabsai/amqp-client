@@ -11,27 +11,27 @@ import (
 type Service struct {
 	connection  *amqp.Connection
 	channel     *amqp.Channel
-	topicPrefix string
-	address     string
-	exchange    string
-	mandatory   bool
-	immediate   bool
+	TopicPrefix string
+	Address     string
+	Exchange    string
+	Mandatory   bool
+	Immediate   bool
 }
 
 // New returns the client service.
 func New(topicPrefix, address, exchange string) *Service {
 	return &Service{
-		topicPrefix: topicPrefix,
-		address:     address,
-		exchange:    exchange,
+		TopicPrefix: topicPrefix,
+		Address:     address,
+		Exchange:    exchange,
 	}
 }
 
 // Start the amqp service.
 func (s *Service) Start() error {
-	connection, err := amqp.Dial(s.address)
+	connection, err := amqp.Dial(s.Address)
 	if err != nil {
-		return fmt.Errorf("Error while dialing to AMQP address: %s", s.address)
+		return fmt.Errorf("Error while dialing to AMQP address: %s", s.Address)
 	}
 
 	s.connection = connection
@@ -77,7 +77,7 @@ func (s *Service) restart() error {
 
 // Publish the message to the topic.
 func (s *Service) Publish(topic string, body interface{}) error {
-	topicName := s.topicPrefix + "." + topic
+	topicName := s.TopicPrefix + "." + topic
 
 	// Marshal into JSON.
 	marshalledBody, err := json.Marshal(body)
@@ -95,42 +95,13 @@ func (s *Service) Publish(topic string, body interface{}) error {
 	}
 
 	return s.channel.Publish(
-		s.exchange,
+		s.Exchange,
 		topicName,
-		s.mandatory,
-		s.immediate,
+		s.Mandatory,
+		s.Immediate,
 		amqp.Publishing{
 			ContentType: "text/plain",
 			Body:        marshalledBody,
 		},
 	)
-}
-
-// This ensures that the service will not be modified once it has been created.
-
-// Exchange return the exchange name.
-func (s Service) Exchange() string {
-	return s.exchange
-}
-
-// TopicPrefix return the topic prefix.
-func (s Service) TopicPrefix() string {
-	return s.topicPrefix
-}
-
-// Address return the amqp address.
-func (s Service) Address() string {
-	return s.address
-}
-
-// These fields can be enabled if necessary.
-
-// EnableMandatory enable the mandatory option.
-func (s *Service) EnableMandatory() {
-	s.mandatory = true
-}
-
-// EnableImmediate enable the immediate option.
-func (s *Service) EnableImmediate() {
-	s.immediate = true
 }
