@@ -33,14 +33,14 @@ func New(topicPrefix, address, exchange, contentType string) *Service {
 func (s *Service) Start() error {
 	connection, err := amqp.Dial(s.Address)
 	if err != nil {
-		return fmt.Errorf("Error while dialing to AMQP address: %s", s.Address)
+		return fmt.Errorf("Error while dialing to AMQP address: %q: %w", s.Address, err)
 	}
 
 	s.connection = connection
 
 	s.channel, err = connection.Channel()
 	if err != nil {
-		return fmt.Errorf("Error while creating AMQP channel")
+		return fmt.Errorf("Error while creating AMQP channel: %w", err)
 	}
 
 	return nil
@@ -84,7 +84,7 @@ func (s *Service) Publish(topic string, body interface{}) error {
 	// Marshal into JSON.
 	marshalledBody, err := json.Marshal(body)
 	if err != nil {
-		return fmt.Errorf("Error while marshalling JSON data")
+		return fmt.Errorf("Error while marshalling JSON data: %w", err)
 	}
 
 	// Verify if channel is closed,
@@ -92,7 +92,7 @@ func (s *Service) Publish(topic string, body interface{}) error {
 	if s.connection.IsClosed() {
 		err = s.restart()
 		if err != nil {
-			return fmt.Errorf("Error while reconnecting the AMQP service: %s", err.Error())
+			return fmt.Errorf("Error while reconnecting the AMQP service: %w", err)
 		}
 	}
 
