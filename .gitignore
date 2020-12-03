@@ -1,0 +1,6 @@
+# Output of the go coverage tool.
+*.out
+*.html
+
+# Test binary, built with `go test -c`
+*.test
