@@ -14,16 +14,18 @@ type Service struct {
 	TopicPrefix string
 	Address     string
 	Exchange    string
+	ContentType string
 	Mandatory   bool
 	Immediate   bool
 }
 
 // New returns the client service.
-func New(topicPrefix, address, exchange string) *Service {
+func New(topicPrefix, address, exchange, contentType string) *Service {
 	return &Service{
 		TopicPrefix: topicPrefix,
 		Address:     address,
 		Exchange:    exchange,
+		ContentType: contentType,
 	}
 }
 
@@ -100,7 +102,7 @@ func (s *Service) Publish(topic string, body interface{}) error {
 		s.Mandatory,
 		s.Immediate,
 		amqp.Publishing{
-			ContentType: "text/plain",
+			ContentType: s.ContentType,
 			Body:        marshalledBody,
 		},
 	)
