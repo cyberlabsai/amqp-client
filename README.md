@@ -14,7 +14,10 @@ import amqp "github.com/cyberlabsai/amqp-client"
 func main() {
 
     client := amqp.New("my-topic-prefix", "amqp://target_service", "exchange-events", "text/plain")
-
+    if err := client.Start(); err != nil {
+		   return err
+    }
+	  defer client.Close()
     // The payload can be of any type.
     err := client.Publish("event-done", "payload");
     if err != nil {
