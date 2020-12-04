@@ -1,4 +1,4 @@
-package main
+package client
 
 import (
 	"encoding/json"
@@ -10,7 +10,7 @@ import (
 // Service of the amqp to subscribe and publish data.
 type Service struct {
 	connection  *amqp.Connection
-	channel     *amqp.Channel
+	Channel     *amqp.Channel
 	TopicPrefix string
 	Address     string
 	Exchange    string
@@ -38,7 +38,7 @@ func (s *Service) Start() error {
 
 	s.connection = connection
 
-	s.channel, err = connection.Channel()
+	s.Channel, err = connection.Channel()
 	if err != nil {
 		return fmt.Errorf("Error while creating AMQP channel: %w", err)
 	}
@@ -50,8 +50,8 @@ func (s *Service) Start() error {
 func (s *Service) Close() error {
 	defer s.clean()
 
-	if s.channel != nil {
-		err := s.channel.Close()
+	if s.Channel != nil {
+		err := s.Channel.Close()
 		if err != nil {
 			return err
 		}
@@ -66,7 +66,7 @@ func (s *Service) Close() error {
 
 // Set the connection and channel pointers to empty.
 func (s *Service) clean() {
-	s.channel = nil
+	s.Channel = nil
 	s.connection = nil
 }
 
@@ -96,7 +96,7 @@ func (s *Service) Publish(topic string, body interface{}) error {
 		}
 	}
 
-	return s.channel.Publish(
+	return s.Channel.Publish(
 		s.Exchange,
 		topicName,
 		s.Mandatory,

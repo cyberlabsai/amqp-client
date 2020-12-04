@@ -1,9 +1,9 @@
-package main_test
+package client_test
 
 import (
 	"testing"
 
-	amqp "github.com/cyberlabsai/amqp-client"
+	amqp "github.com/cyberlabsai/amqp-client/client"
 )
 
 func TestNewClient(t *testing.T) {
