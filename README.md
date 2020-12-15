@@ -1,6 +1,8 @@
-# Go AMQP Client
+<img src="https://raw.githubusercontent.com/Yoonit-Labs/android-yoonit-camera/development/logo_cyberlabs.png" width="300">
 
-This is an AMQP client extension to quickly connect and publish messages using a RabbitMQ client.
+# amqp-client
+
+An AMQP client extension to quickly connect and publish messages using a RabbitMQ client.
 
 ## Usage
 
@@ -17,8 +19,9 @@ func main() {
     if err := client.Start(); err != nil {
 		   return err
     }
-	  defer client.Close()
-    // The payload can be of any type.
+	defer client.Close()
+    
+   // The payload can be of any type.
     err := client.Publish("event-done", "payload");
     if err != nil {
         return err
@@ -41,8 +44,3 @@ First, search by uncovered functions.
 ```shell
   go tool cover -html=coverage.out
 ```
-
-## Todo list
-- [ ] Mock amqp for connection tests?
-- [ ] Graceful close the service
-- [ ] 100% Unit tests
