@@ -13,18 +13,16 @@ type Service struct {
 	Channel     *amqp.Channel
 	TopicPrefix string
 	Address     string
-	Exchange    string
 	ContentType string
 	Mandatory   bool
 	Immediate   bool
 }
 
 // New returns the client service.
-func New(topicPrefix, address, exchange, contentType string) *Service {
+func New(topicPrefix, address, contentType string) *Service {
 	return &Service{
 		TopicPrefix: topicPrefix,
 		Address:     address,
-		Exchange:    exchange,
 		ContentType: contentType,
 	}
 }
@@ -78,9 +76,7 @@ func (s *Service) restart() error {
 }
 
 // Publish the message to the topic.
-func (s *Service) Publish(topic string, body interface{}) error {
-	topicName := s.TopicPrefix + "." + topic
-
+func (s *Service) Publish(exchange, topic string, body interface{}) error {
 	// Marshal into JSON.
 	marshalledBody, err := json.Marshal(body)
 	if err != nil {
@@ -97,8 +93,8 @@ func (s *Service) Publish(topic string, body interface{}) error {
 	}
 
 	return s.Channel.Publish(
-		s.Exchange,
-		topicName,
+		exchange,
+		topic,
 		s.Mandatory,
 		s.Immediate,
 		amqp.Publishing{
