@@ -9,7 +9,7 @@ To use the library, connect to an AMQP service passing the variables and will be
 ```go
 package main
 
-import amqp "github.com/cyberlabsai/amqp-client"
+import amqp "github.com/cyberlabsai/amqp-client/client"
 
 func main() {
 
@@ -38,8 +38,3 @@ First, search by uncovered functions.
 ```shell
   go tool cover -html=coverage.out
 ```
-
-## Todo list
-- [ ] Mock amqp for connection tests?
-- [ ] Graceful close the service
-- [ ] 100% Unit tests
