@@ -1,6 +1,8 @@
-# Go AMQP Client
+<img src="https://raw.githubusercontent.com/Yoonit-Labs/android-yoonit-camera/development/logo_cyberlabs.png" width="300">
 
-This is an AMQP client extension to quickly connect and publish messages using a RabbitMQ client.
+# amqp-client
+
+An AMQP client extension to quickly connect and publish messages using a RabbitMQ client.
 
 ## Usage
 
