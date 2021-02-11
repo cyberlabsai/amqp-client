@@ -11,37 +11,33 @@ import (
 type Service struct {
 	connection  *amqp.Connection
 	Channel     *amqp.Channel
-	TopicPrefix string
-	Address     string
+	URL         string
 	ContentType string
 	Mandatory   bool
 	Immediate   bool
 }
 
 // New returns the client service.
-func New(topicPrefix, address, contentType string) *Service {
+func New(url, contentType string) *Service {
 	return &Service{
-		TopicPrefix: topicPrefix,
-		Address:     address,
+		URL:         url,
 		ContentType: contentType,
 	}
 }
 
 // Start the amqp service.
-func (s *Service) Start() error {
-	connection, err := amqp.Dial(s.Address)
+func (s *Service) Start() (err error) {
+	s.connection, err = amqp.Dial(s.URL)
 	if err != nil {
-		return fmt.Errorf("Error while dialing to AMQP address: %q: %w", s.Address, err)
+		return fmt.Errorf("Couldn't dialing to amqp url: %q message: %w", s.URL, err)
 	}
 
-	s.connection = connection
-
-	s.Channel, err = connection.Channel()
+	s.Channel, err = s.connection.Channel()
 	if err != nil {
-		return fmt.Errorf("Error while creating AMQP channel: %w", err)
+		return fmt.Errorf("Couldn't open the channel: %w", err)
 	}
 
-	return nil
+	return
 }
 
 // Close do the maintenance to close/clean any connections with the server.

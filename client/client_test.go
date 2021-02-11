@@ -9,31 +9,28 @@ import (
 func TestNewClient(t *testing.T) {
 
 	expected := []struct {
-		topicPrefix string
-		address     string
-		exchange    string
+		URL         string
+		contentType string
 	}{
 		{
-			topicPrefix: "test-topic",
-			address:     "amqp://address",
-			exchange:    "test-exchange",
+			URL:         "amqp://url1",
+			contentType: "text/plain",
 		},
 		{
-			topicPrefix: "test-topic2",
-			address:     "amqp://address2",
-			exchange:    "",
+			URL:         "amqp://url2",
+			contentType: "application/json",
 		},
 	}
 
 	for i, e := range expected {
-		client := amqp.New(e.topicPrefix, e.address, "text/plain")
+		client := amqp.New(e.URL, "text/plain")
 
-		if client.TopicPrefix != e.topicPrefix {
-			t.Errorf("Test case %v failed, it should be topic prefix equals to [%s] but got [%s]", i, e.topicPrefix, client.TopicPrefix)
+		if client.URL != e.URL {
+			t.Errorf("Test case %v failed, it should be url equals to [%s] but got [%s]", i, e.URL, client.URL)
 		}
 
-		if client.Address != e.address {
-			t.Errorf("Test case %v failed, it should be address equals to [%s] but got [%s]", i, e.exchange, client.Address)
+		if client.ContentType != e.contentType {
+			t.Errorf("Test case %v failed, it should be content type equals to [%s] but got [%s]", i, e.contentType, client.ContentType)
 		}
 	}
 }
