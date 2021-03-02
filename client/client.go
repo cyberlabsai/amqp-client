@@ -107,3 +107,48 @@ func (s *Service) Publish(topic string, body interface{}) error {
 		},
 	)
 }
+
+func (s *Service) Consume(
+	consumerName, queueName, topic string) (
+	*<-chan amqp.Delivery, error) {
+	// Declare the queue
+	_, err := s.Channel.QueueDeclare(
+		queueName,
+		false, // durable
+		false, // autoDelete
+		false, // exclusive
+		false, // noWait
+		nil,   // args
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	// Bind to exchange:
+	err = s.Channel.QueueBind(
+		queueName,  // queue name
+		topic,      // topic
+		s.Exchange, // exchange name
+		false,      // noWait
+		nil,        // Table
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	// Open the channel:
+	messages, err := s.Channel.Consume(
+		queueName,
+		consumerName, // consumer name
+		false,        // autoAck
+		true,         // exclusive
+		false,        // noLocal
+		false,        // noWait
+		nil,          // args
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	return &messages, nil
+}
