@@ -108,9 +108,10 @@ func (s *Service) Publish(topic string, body interface{}) error {
 	)
 }
 
+// Consume messages from a topic.
 func (s *Service) Consume(
 	consumerName, queueName, topic string) (
-	*<-chan amqp.Delivery, error) {
+	<-chan amqp.Delivery, error) {
 	// Declare the queue
 	_, err := s.Channel.QueueDeclare(
 		queueName,
@@ -150,5 +151,5 @@ func (s *Service) Consume(
 		return nil, err
 	}
 
-	return &messages, nil
+	return messages, nil
 }
