@@ -142,7 +142,7 @@ func (s *Service) Consume(
 		queueName,
 		consumerName, // consumer name
 		false,        // autoAck
-		true,         // exclusive
+		false,        // exclusive
 		false,        // noLocal
 		false,        // noWait
 		nil,          // args
